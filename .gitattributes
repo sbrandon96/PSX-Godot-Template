@@ -1,2 +1,33 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+
+# Godot text resources are text, always LF.
+*.gd        text eol=lf
+*.gdshader  text eol=lf
+*.tscn      text eol=lf
+*.tres      text eol=lf
+*.godot     text eol=lf
+*.cfg       text eol=lf
+*.import    text eol=lf
+*.uid       text eol=lf
+
+# Binary assets: never diff, never munge line endings.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.tga   binary
+*.exr   binary
+*.hdr   binary
+*.ogg   binary
+*.wav   binary
+*.mp3   binary
+*.glb   binary
+*.fbx   binary
+*.blend binary
+*.ttf   binary
+*.otf   binary
+*.res   binary
+*.scn   binary
+*.ctex  binary
+*.docx  binary

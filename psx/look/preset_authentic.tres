@@ -1,0 +1,19 @@
+; PSXLook preset: authentic
+; Calibrated to real PlayStation 1 output: 320x240 vertex grid, full affine warp, 5-bit colour. The template default.
+; Every value is written out explicitly, even where it matches the script
+; default, so this file states the whole look rather than inheriting half of it.
+[gd_resource type="Resource" script_class="PSXLookPreset" format=3 uid="uid://gcieyv1xb2gb"]
+
+[ext_resource type="Script" uid="uid://fnrn61tu7upx" path="res://psx/look/psx_look_preset.gd" id="1_preset"]
+
+[resource]
+script = ExtResource("1_preset")
+jitter_enabled = true
+snap_resolution = Vector2(320, 240)
+affine_strength = 1.0
+color_depth = 32.0
+dither_strength = 1.0
+fog_enabled = true
+fog_color = Color(0.05, 0.05, 0.08, 1)
+fog_near = 6.0
+fog_far = 24.0

@@ -1,0 +1,19 @@
+; PSXLook preset: extreme
+; Past what the hardware actually did. Halved snap grid and 3-bit colour, for demonstrating the range and stress-testing a scene.
+; Every value is written out explicitly, even where it matches the script
+; default, so this file states the whole look rather than inheriting half of it.
+[gd_resource type="Resource" script_class="PSXLookPreset" format=3 uid="uid://fv2jliktpjh7"]
+
+[ext_resource type="Script" uid="uid://fnrn61tu7upx" path="res://psx/look/psx_look_preset.gd" id="1_preset"]
+
+[resource]
+script = ExtResource("1_preset")
+jitter_enabled = true
+snap_resolution = Vector2(160, 120)
+affine_strength = 1.0
+color_depth = 8.0
+dither_strength = 1.0
+fog_enabled = true
+fog_color = Color(0.04, 0.03, 0.06, 1)
+fog_near = 3.0
+fog_far = 12.0

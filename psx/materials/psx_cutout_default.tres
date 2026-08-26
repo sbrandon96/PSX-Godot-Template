@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://psx/shaders/psx_cutout.gdshader" id="1_b6eu5"]
+
+[resource]
+resource_name = "psx_cutout_default"
+render_priority = 0
+shader = ExtResource("1_b6eu5")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/alpha_cutoff = 0.5

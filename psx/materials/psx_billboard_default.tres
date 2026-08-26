@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://psx/shaders/psx_billboard.gdshader" id="1_qqt1k"]
+
+[resource]
+resource_name = "psx_billboard_default"
+render_priority = 0
+shader = ExtResource("1_qqt1k")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/alpha_cutoff = 0.5
+shader_parameter/y_billboard = false
