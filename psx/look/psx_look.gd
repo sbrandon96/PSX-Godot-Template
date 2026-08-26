@@ -47,8 +47,14 @@ const DEFAULT_PRESET: String = PRESET_AUTHENTIC
 
 var _current: PSXLookPreset = PSXLookPreset.new()
 ## Suppresses per-property pushes while a whole preset is being applied, so
-## applying a preset emits look_changed once instead of nine times.
+## applying a preset emits look_changed once instead of eleven times.
 var _applying: bool = false
+## Which preset the live values came from, and whether anything has been
+## changed since. Purely descriptive -- it exists so a debug overlay can say
+## "authentic (modified)" rather than leaving you guessing what you are
+## looking at. Nothing in the rendering path reads it.
+var _preset_name: String = ""
+var _modified: bool = false
 
 # --- Typed accessors -------------------------------------------------------
 # Each reads and writes through _current, then pushes just that one parameter.
@@ -109,6 +115,24 @@ var fog_far: float:
 		_current.fog_far = value
 		_push(&"psx_fog_far", value)
 
+# --- Post-process pass toggles ---------------------------------------------
+# These are NOT global shader parameters. There is no uniform to set: enabling
+# a pass means making a ColorRect visible. PSXLook owns the intent and emits
+# look_changed; ui/post_process/post_process_stack.gd owns the nodes and does
+# the work. That keeps PSXLook free of any knowledge of the scene tree.
+
+var dither_enabled: bool:
+	get: return _current.dither_enabled
+	set(value):
+		_current.dither_enabled = value
+		_touch()
+
+var crt_enabled: bool:
+	get: return _current.crt_enabled
+	set(value):
+		_current.crt_enabled = value
+		_touch()
+
 
 func _ready() -> void:
 	# Run even when the editor is paused or the tree is stopped; shader globals
@@ -124,6 +148,14 @@ func apply_preset(preset: PSXLookPreset) -> void:
 		push_error("PSXLook.apply_preset() called with null. Look unchanged.")
 		return
 	_current = preset.duplicate() as PSXLookPreset
+	# "res://psx/look/preset_authentic.tres" -> "authentic"
+	var path := preset.resource_path
+	_preset_name = path.get_file().get_basename().trim_prefix("preset_") if not path.is_empty() else ""
+	# Cleared BEFORE _push_all(), not after: _push_all() emits look_changed
+	# synchronously, and listeners read get_preset_name() from inside that
+	# emission. Clearing afterwards would leave every listener showing
+	# "(modified)" for a preset that was just freshly applied.
+	_modified = false
 	_push_all()
 
 
@@ -153,11 +185,25 @@ func get_current_preset() -> PSXLookPreset:
 	return _current.duplicate() as PSXLookPreset
 
 
+## A human-readable name for the live look: "authentic", "extreme (modified)",
+## or "custom" if the values never came from a .tres. For display only.
+func get_preset_name() -> String:
+	var base := _preset_name if not _preset_name.is_empty() else "custom"
+	return base + " (modified)" if _modified else base
+
+
 # --- Internals -------------------------------------------------------------
 
 func _push(name: StringName, value: Variant) -> void:
 	RenderingServer.global_shader_parameter_set(name, value)
+	_touch()
+
+
+## Announces a change. Separate from _push() because the post-process toggles
+## change the look without there being any shader global to set.
+func _touch() -> void:
 	if not _applying:
+		_modified = true
 		look_changed.emit()
 
 
@@ -173,5 +219,7 @@ func _push_all() -> void:
 	fog_color = _current.fog_color
 	fog_near = _current.fog_near
 	fog_far = _current.fog_far
+	dither_enabled = _current.dither_enabled
+	crt_enabled = _current.crt_enabled
 	_applying = false
 	look_changed.emit()

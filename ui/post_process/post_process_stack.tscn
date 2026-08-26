@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" uid="uid://bkmhossuprmry" path="res://ui/post_process/post_process_stack.gd" id="1_stack"]
+[ext_resource type="Shader" uid="uid://c6wdwfnloy3sm" path="res://psx/shaders/psx_dither.gdshader" id="2_dither"]
+[ext_resource type="Shader" uid="uid://cayj2o73cmlbh" path="res://psx/shaders/psx_crt.gdshader" id="3_crt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dither"]
+shader = ExtResource("2_dither")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crt"]
+shader = ExtResource("3_crt")
+shader_parameter/curvature = 0.04
+shader_parameter/scanline_strength = 0.15
+shader_parameter/vignette_strength = 0.2
+
+[node name="PostProcessStack" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_stack")
+
+[node name="DitherPass" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_dither")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+; LOAD-BEARING. Re-captures the backbuffer so CRTPass samples the DITHERED
+; frame instead of the pre-post-process one. Without this the CRT pass
+; silently discards everything DitherPass did. See post_process_stack.gd.
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+visible = false
+copy_mode = 2
+
+[node name="CRTPass" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_crt")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

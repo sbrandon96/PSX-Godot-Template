@@ -30,6 +30,12 @@ window/size/window_height_override=960
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
 
+[gui]
+
+theme/default_font_antialiasing=0
+theme/default_font_hinting=0
+theme/default_font_subpixel_positioning=0
+
 [importer_defaults]
 
 texture={

@@ -1,11 +1,17 @@
 ## psx_look_preset.gd
 ##
-## WHAT: A saveable profile describing one complete PSX look -- every value
-##       that PSXLook pushes to the rendering server, in one Resource.
+## WHAT: A saveable profile describing one complete PSX look, in one Resource.
 ##
 ## RESPONSIBLE FOR: being the single definition of "what a look is". PSXLook
 ##       stores its live state as one of these, so adding a look parameter
 ##       means editing this file and the shaders, not three places.
+##
+## NOTE: most of these become global shader parameters, but the Post-Processing
+##       toggles do not -- they are node visibility, watched by
+##       ui/post_process/post_process_stack.gd. They live here anyway, because
+##       a "look" that cannot say whether the CRT is on is not a whole look,
+##       and splitting the definition across two places is exactly the
+##       confusion this resource exists to prevent.
 ##
 ## WHY IT EXISTS: presets need to be authored in the inspector, saved as .tres,
 ##       swapped at runtime, and shipped with the template. A Resource does all
@@ -45,3 +51,12 @@ extends Resource
 ## Distance at which geometry is fully faded out. Pair this with the camera's
 ## far plane so geometry dissolves instead of popping.
 @export var fog_far: float = 24.0
+
+@export_group("Post-Processing")
+## Whether the full-screen dither/quantise pass runs. Toggling this off is not
+## the same as dither_strength = 0: this skips the pass entirely, while a zero
+## strength still quantises (with hard banding instead of dithering).
+@export var dither_enabled: bool = true
+## Whether the CRT pass runs. Off in every preset this template ships, because
+## the CRT filter is a garnish over the PSX look, not part of it.
+@export var crt_enabled: bool = false

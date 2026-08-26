@@ -17,3 +17,5 @@ fog_enabled = true
 fog_color = Color(0.05, 0.05, 0.08, 1)
 fog_near = 6.0
 fog_far = 24.0
+dither_enabled = true
+crt_enabled = false

@@ -18,6 +18,7 @@
 ##   UILayer          (CanvasLayer,  10)    in-game UI  -- IS post-processed
 ##   PostProcessLayer (CanvasLayer, 100)    dither, CRT
 ##   LoadingLayer     (CanvasLayer, 200)    loading screen -- NOT post-processed
+##   (DebugOverlay)   (CanvasLayer, 300)    developer HUD -- NOT post-processed
 ##
 ## A CanvasLayer with a higher `layer` draws later. UILayer sits BELOW the post
 ## stack on purpose: a HUD should be quantised and dithered along with the
@@ -26,6 +27,11 @@
 ## there is no world to be part of, and running it through a CRT curve would
 ## warp the only thing on screen. That is the answer to "above or through" --
 ## in-game UI goes through, the loading screen goes above.
+##
+## The debug overlay carries its own CanvasLayer at 300 rather than occupying a
+## named slot here, because it must outrank the loading screen too (you want
+## the stats readable DURING a load) and because a leaf that owns its own layer
+## is deleted by deleting one directory. Stripping it changes nothing else.
 
 extends Node
 
@@ -42,12 +48,19 @@ extends Node
 const INITIAL_SCENE: String = ""
 
 ## Instanced into PostProcessLayer at boot. Empty disables post-processing.
-## Wired up in Phase 6, when ui/post_process/ exists.
-const POST_PROCESS_SCENE: String = ""
+const POST_PROCESS_SCENE: String = "res://ui/post_process/post_process_stack.tscn"
 
 ## Instanced into LoadingLayer at boot and hidden immediately. Empty means
-## loads happen with no loading screen. Wired up in Phase 6.
-const LOADING_SCREEN_SCENE: String = ""
+## loads happen with no loading screen.
+const LOADING_SCREEN_SCENE: String = "res://ui/loading/loading_screen.tscn"
+
+## Developer HUD, toggled with F3. It is its own CanvasLayer (300) so it draws
+## above everything else, and is therefore added directly to this node rather
+## than into one of the layer slots.
+##
+## TO STRIP IT FROM A SHIPPING GAME: set this to "". The overlay also frees
+## itself in non-debug builds on its own -- see ui/debug/debug_overlay.gd.
+const DEBUG_OVERLAY_SCENE: String = "res://ui/debug/debug_overlay.tscn"
 
 @onready var world_container: Node3D = $WorldContainer
 @onready var ui_layer: CanvasLayer = $UILayer
@@ -74,6 +87,9 @@ func _ready() -> void:
 	var loading_screen := _instance_into(LOADING_SCREEN_SCENE, loading_layer, "loading screen")
 	if loading_screen is CanvasItem:
 		(loading_screen as CanvasItem).visible = false
+
+	# --- 4b. Developer HUD, on its own layer above everything. -------------
+	_instance_into(DEBUG_OVERLAY_SCENE, self, "debug overlay")
 
 	# --- 5. Hand SceneLoader its container, then request the first scene. --
 	# SceneLoader has no idea what a bootstrap is; it is told where to put

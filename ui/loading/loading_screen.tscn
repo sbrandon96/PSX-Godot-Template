@@ -1,0 +1,70 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" uid="uid://cejxetwtfvu3u" path="res://ui/loading/loading_screen.gd" id="1_loading"]
+[ext_resource type="Shader" uid="uid://ctvemsqw16mta" path="res://psx/shaders/psx_ui.gdshader" id="2_ui"]
+
+; The loading screen renders ABOVE the post-process stack, so it is not
+; dithered by the framebuffer pass. This material applies the same palette
+; clamp from the same PSXLook globals, so it still matches the world.
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ui"]
+shader = ExtResource("2_ui")
+shader_parameter/palette_bias = 1.0
+
+[node name="LoadingScreen" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_loading")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.043, 0.043, 0.067, 1)
+
+[node name="Layout" type="VBoxContainer" parent="."]
+material = SubResource("ShaderMaterial_ui")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 2
+theme_override_constants/separation = 4
+
+[node name="StatusLabel" type="Label" parent="Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.75, 0.73, 0.68, 1)
+theme_override_font_sizes/font_size = 12
+text = "LOADING"
+
+[node name="ProgressBar" type="ProgressBar" parent="Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="PercentLabel" type="Label" parent="Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.45, 0.44, 0.42, 1)
+theme_override_font_sizes/font_size = 8
+text = "0%"
+horizontal_alignment = 2

@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://ctv4fttf2l00" path="res://ui/debug/debug_overlay.gd" id="1_debug"]
+
+; Opaque, not the default translucent panel: this readout sits over whatever
+; the game is rendering, and over bright geometry a see-through panel is
+; unreadable. A debug overlay you cannot read is not a debug overlay.
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.043, 0.047, 0.063, 1)
+border_width_right = 1
+border_color = Color(0.22, 0.24, 0.28, 1)
+
+; Layer 300: above PostProcessLayer (100) and LoadingLayer (200), so the
+; readout is never dithered or bent by the CRT pass.
+[node name="DebugOverlay" type="CanvasLayer"]
+layer = 300
+script = ExtResource("1_debug")
+
+; Left 65% only. The whole point is watching the picture change as you drag a
+; slider, so the overlay deliberately does not cover the scene it is tuning.
+[node name="Root" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 9
+anchor_bottom = 1.0
+anchor_right = 0.65
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+; A safety net for when someone adds rows to the tables in the script.
+[node name="Scroll" type="ScrollContainer" parent="Root"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Margin" type="MarginContainer" parent="Root/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Column" type="VBoxContainer" parent="Root/Scroll/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StatsLabel" type="Label" parent="Root/Scroll/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.85, 0.55, 1)
+theme_override_font_sizes/font_size = 8
+text = "fps --"
+
+[node name="PresetLabel" type="Label" parent="Root/Scroll/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.8, 0.55, 1)
+theme_override_font_sizes/font_size = 8
+text = "look: --"
+
+[node name="PresetRow" type="HBoxContainer" parent="Root/Scroll/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+; Two columns so the four toggles cost two rows instead of four -- that is what
+; makes the whole overlay fit in 240px without scrolling.
+[node name="ToggleGrid" type="GridContainer" parent="Root/Scroll/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 0
+columns = 2
+
+[node name="SliderColumn" type="VBoxContainer" parent="Root/Scroll/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
