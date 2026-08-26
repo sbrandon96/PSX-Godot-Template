@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://df4nrkbthyqjj" path="res://core/scenes/bootstrap.gd" id="1_bootstrap"]
+
+[node name="Bootstrap" type="Node" unique_id=185507437]
+script = ExtResource("1_bootstrap")
+
+[node name="WorldContainer" type="Node3D" parent="." unique_id=2072802822]
+
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=660378672]
+layer = 10
+
+[node name="PostProcessLayer" type="CanvasLayer" parent="." unique_id=1911821359]
+layer = 100
+
+[node name="LoadingLayer" type="CanvasLayer" parent="." unique_id=1768255566]
+layer = 200
