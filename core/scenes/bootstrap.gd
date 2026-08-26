@@ -45,7 +45,7 @@ extends Node
 #  out the framework, and what the template ships with until it has a level
 #  worth loading.
 # ===========================================================================
-const INITIAL_SCENE: String = ""
+const INITIAL_SCENE: String = "res://levels/test/test_room.tscn"
 
 ## Instanced into PostProcessLayer at boot. Empty disables post-processing.
 const POST_PROCESS_SCENE: String = "res://ui/post_process/post_process_stack.tscn"

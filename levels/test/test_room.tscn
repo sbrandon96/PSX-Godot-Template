@@ -1,0 +1,306 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://bwnn5lkix1yoa" path="res://levels/test/test_room.gd" id="0_room"]
+
+[ext_resource type="Shader" path="res://psx/shaders/psx_opaque.gdshader" id="1_8dovg"]
+[ext_resource type="Texture2D" path="res://assets/textures/test_checker.png" id="2_0k4bm"]
+[ext_resource type="Texture2D" path="res://assets/textures/test_brick.png" id="3_1afm8"]
+[ext_resource type="Shader" path="res://psx/shaders/psx_cutout.gdshader" id="4_p6i04"]
+[ext_resource type="Texture2D" path="res://assets/textures/test_grate.png" id="5_qwlfn"]
+[ext_resource type="Shader" path="res://psx/shaders/psx_billboard.gdshader" id="6_86suf"]
+[ext_resource type="Texture2D" path="res://assets/textures/test_lamp.png" id="7_3sjb7"]
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="8_r0ggm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hwsf2"]
+render_priority = 0
+shader = ExtResource("1_8dovg")
+shader_parameter/albedo_texture = ExtResource("2_0k4bm")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(6, 6)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tm0p7"]
+size = Vector2(12, 12)
+subdivide_width = 5
+subdivide_depth = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iru1t"]
+render_priority = 0
+shader = ExtResource("1_8dovg")
+shader_parameter/albedo_texture = ExtResource("3_1afm8")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(6, 6)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_filxq"]
+size = Vector2(12, 12)
+subdivide_width = 5
+subdivide_depth = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w4whj"]
+render_priority = 0
+shader = ExtResource("1_8dovg")
+shader_parameter/albedo_texture = ExtResource("3_1afm8")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(6, 2)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_156fw"]
+size = Vector2(12, 4)
+subdivide_width = 5
+subdivide_depth = 1
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xfet7"]
+size = Vector2(12, 4)
+subdivide_width = 5
+subdivide_depth = 1
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fcem2"]
+size = Vector2(12, 4)
+subdivide_width = 5
+subdivide_depth = 1
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_47tow"]
+size = Vector2(12, 4)
+subdivide_width = 5
+subdivide_depth = 1
+orientation = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fix10"]
+size = Vector3(12, 0.5, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p2ayv"]
+size = Vector3(12, 0.5, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7u00d"]
+size = Vector3(12, 4, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8gtg6"]
+size = Vector3(12, 4, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hjelk"]
+size = Vector3(0.5, 4, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b07qj"]
+size = Vector3(0.5, 4, 12)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e4bk6"]
+render_priority = 0
+shader = ExtResource("1_8dovg")
+shader_parameter/albedo_texture = ExtResource("2_0k4bm")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gwebn"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_sc8vy"]
+radius = 0.35
+height = 1.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_uan6m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ubdid"]
+render_priority = 0
+shader = ExtResource("4_p6i04")
+shader_parameter/albedo_texture = ExtResource("5_qwlfn")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(2, 2)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/alpha_cutoff = 0.5
+
+[sub_resource type="QuadMesh" id="QuadMesh_0xh1q"]
+size = Vector2(2.6, 2.6)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8sobo"]
+render_priority = 0
+shader = ExtResource("6_86suf")
+shader_parameter/albedo_texture = ExtResource("7_3sjb7")
+shader_parameter/albedo_modulate = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/alpha_cutoff = 0.35
+shader_parameter/y_billboard = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_c4rcd"]
+size = Vector2(1.1, 1.1)
+
+[sub_resource type="Environment" id="Environment_f46wo"]
+background_mode = 1
+background_color = Color(0.05, 0.05, 0.08, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.3, 0.3, 0.38, 1)
+ambient_light_energy = 0.35
+
+[node name="TestRoom" type="Node3D" unique_id=1707566535]
+script = ExtResource("0_room")
+
+[node name="Shell" type="Node3D" parent="." unique_id=1879287]
+
+[node name="Floor" type="MeshInstance3D" parent="Shell" unique_id=671621031]
+material_override = SubResource("ShaderMaterial_hwsf2")
+mesh = SubResource("PlaneMesh_tm0p7")
+
+[node name="Ceiling" type="MeshInstance3D" parent="Shell" unique_id=662201398]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 4, 0)
+material_override = SubResource("ShaderMaterial_iru1t")
+mesh = SubResource("PlaneMesh_filxq")
+
+[node name="WallNorth" type="MeshInstance3D" parent="Shell" unique_id=1049144299]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6)
+material_override = SubResource("ShaderMaterial_w4whj")
+mesh = SubResource("PlaneMesh_156fw")
+
+[node name="WallSouth" type="MeshInstance3D" parent="Shell" unique_id=295061957]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 2, 6)
+material_override = SubResource("ShaderMaterial_w4whj")
+mesh = SubResource("PlaneMesh_xfet7")
+
+[node name="WallWest" type="MeshInstance3D" parent="Shell" unique_id=2123878462]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 2, 0)
+material_override = SubResource("ShaderMaterial_w4whj")
+mesh = SubResource("PlaneMesh_fcem2")
+
+[node name="WallEast" type="MeshInstance3D" parent="Shell" unique_id=988038420]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 2, 0)
+material_override = SubResource("ShaderMaterial_w4whj")
+mesh = SubResource("PlaneMesh_47tow")
+
+[node name="ShellCollision" type="StaticBody3D" parent="." unique_id=553093332]
+
+[node name="@CollisionShape3D@2" type="CollisionShape3D" parent="ShellCollision" unique_id=1786516583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+shape = SubResource("BoxShape3D_fix10")
+
+[node name="@CollisionShape3D@3" type="CollisionShape3D" parent="ShellCollision" unique_id=325452047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.25, 0)
+shape = SubResource("BoxShape3D_p2ayv")
+
+[node name="@CollisionShape3D@4" type="CollisionShape3D" parent="ShellCollision" unique_id=2034855250]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6.25)
+shape = SubResource("BoxShape3D_7u00d")
+
+[node name="@CollisionShape3D@5" type="CollisionShape3D" parent="ShellCollision" unique_id=2088576613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6.25)
+shape = SubResource("BoxShape3D_8gtg6")
+
+[node name="@CollisionShape3D@6" type="CollisionShape3D" parent="ShellCollision" unique_id=174521465]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.25, 2, 0)
+shape = SubResource("BoxShape3D_hjelk")
+
+[node name="@CollisionShape3D@7" type="CollisionShape3D" parent="ShellCollision" unique_id=1003030762]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.25, 2, 0)
+shape = SubResource("BoxShape3D_b07qj")
+
+[node name="Props" type="Node3D" parent="." unique_id=631121989]
+
+[node name="Cube0" type="MeshInstance3D" parent="Props" unique_id=1681976054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.4, 2)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("BoxMesh_gwebn")
+
+[node name="Cube1" type="MeshInstance3D" parent="Props" unique_id=216240220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.4, 0.6)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("BoxMesh_gwebn")
+
+[node name="Cube2" type="MeshInstance3D" parent="Props" unique_id=417329592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.4, -0.8)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("BoxMesh_gwebn")
+
+[node name="Cube3" type="MeshInstance3D" parent="Props" unique_id=1950553920]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.4, -2.2)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("BoxMesh_gwebn")
+
+[node name="Cube4" type="MeshInstance3D" parent="Props" unique_id=1490514355]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.4, -3.6)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("BoxMesh_gwebn")
+
+[node name="Cube5" type="MeshInstance3D" parent="Props" unique_id=547572872]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.4, -5)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("BoxMesh_gwebn")
+
+[node name="Capsule0" type="MeshInstance3D" parent="Props" unique_id=1601715091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.65, 2)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("CapsuleMesh_sc8vy")
+
+[node name="Capsule1" type="MeshInstance3D" parent="Props" unique_id=1778989519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.65, 0.6)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("CapsuleMesh_sc8vy")
+
+[node name="Capsule2" type="MeshInstance3D" parent="Props" unique_id=1110034395]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.65, -0.8)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("CapsuleMesh_sc8vy")
+
+[node name="Capsule3" type="MeshInstance3D" parent="Props" unique_id=721832348]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.65, -2.2)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("CapsuleMesh_sc8vy")
+
+[node name="Capsule4" type="MeshInstance3D" parent="Props" unique_id=729650068]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.65, -3.6)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("CapsuleMesh_sc8vy")
+
+[node name="Capsule5" type="MeshInstance3D" parent="Props" unique_id=2065491884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.65, -5)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("CapsuleMesh_sc8vy")
+
+[node name="RotatingCube" type="MeshInstance3D" parent="Props" unique_id=600284972]
+transform = Transform3D(0.9781476, -0.2079117, 0, 0.19773579, 0.9302737, -0.309017, 0.06424825, 0.30226424, 0.95105654, 0, 1.4, -1)
+material_override = SubResource("ShaderMaterial_e4bk6")
+mesh = SubResource("BoxMesh_uan6m")
+
+[node name="CutoutGrate" type="MeshInstance3D" parent="Props" unique_id=318643826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -4.6)
+material_override = SubResource("ShaderMaterial_ubdid")
+mesh = SubResource("QuadMesh_0xh1q")
+
+[node name="BillboardLamp" type="MeshInstance3D" parent="Props" unique_id=2057213514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2.2, -3.4)
+material_override = SubResource("ShaderMaterial_8sobo")
+mesh = SubResource("QuadMesh_c4rcd")
+
+; An OmniLight, not a DirectionalLight: this room is sealed, and a directional
+; light would be blocked entirely by its own ceiling shadow.
+;
+; light_energy = 2.5 was tuned WITH shadow_enabled already true, per the
+; standing warning about Godot issue #90259 (shadows costing roughly 5x
+; brightness in the Compatibility renderer).
+;
+; That warning does NOT reproduce here. Measured on Godot 4.7.1,
+; Compatibility/GLES3, mean scene luminance in this room:
+;
+;   energy 1.0, shadows OFF -> 0.1543
+;   energy 1.0, shadows ON  -> 0.1791   (x1.16, not x0.2)
+;   energy 4.0, shadows ON  -> 0.3231
+;   energy 6.0, shadows ON  -> 0.3810
+;
+; Enabling shadows made the room 16% BRIGHTER, not 5x darker. So no
+; compensation is applied; 2.5 is simply the value that exposes this room
+; well -- corner detail readable, ceiling hotspot short of clipping.
+; Re-measure before trusting this on a different Godot version.
+[node name="RoomLight" type="OmniLight3D" parent="." unique_id=100115428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
+light_color = Color(1, 0.94, 0.85, 1)
+light_energy = 2.5
+shadow_enabled = true
+omni_range = 22.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=363111863]
+environment = SubResource("Environment_f46wo")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1805256035 instance=ExtResource("8_r0ggm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 4.6)
