@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cx7a6cdcuky41" path="res://player/player.gd" id="1_player"]
+
+; resource_local_to_scene is load-bearing: without it every instanced player
+; would share one CapsuleShape3D and they would fight over its height while
+; crouching. Height/radius here are overwritten from the script's exports on
+; _ready(); these values only shape the editor gizmo.
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+resource_local_to_scene = true
+radius = 0.35
+height = 1.8
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+current = true
+near = 0.05
+far = 24.0
+
+[node name="InteractionRay" type="RayCast3D" parent="Head"]
+enabled = false
+target_position = Vector3(0, 0, -2)
