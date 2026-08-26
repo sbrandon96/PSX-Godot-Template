@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+	<title>$GODOT_PROJECT_NAME</title>
+	$GODOT_HEAD_INCLUDE
+	<!--
+		Custom web shell for the PSX Godot template.
+
+		WHY THIS EXISTS RATHER THAN GODOT'S DEFAULT SHELL:
+
+		1. THE CLICK-TO-START GATE IS NOT DECORATION. Browsers refuse to start
+		   an AudioContext, and refuse pointer lock, until the page has seen a
+		   real user gesture. Godot's default shell has no gate, so a web build
+		   made with it launches silent and cannot capture the mouse until the
+		   player happens to click. player.gd documents the same constraint
+		   from the engine side; this is the other half of that fix.
+
+		2. HONEST PROGRESS. The default shell shows an indeterminate bar for a
+		   ~40 MB wasm download. This one reports real bytes.
+
+		3. BROWSER WARNING. Safari has known WebGL 2.0 problems that Chromium
+		   and Firefox do not. Detect and say so rather than rendering wrong.
+
+		DELIBERATELY NEUTRAL. No title card, no grain, no theming. A template
+		should not ship anybody's art direction -- style this file when you
+		style your game. Everything here is infrastructure.
+
+		Godot replaces $GODOT_* placeholders at export time. Do not rename or
+		remove them.
+	-->
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			border: 0;
+			height: 100%;
+			background: #0b0b10;
+			color: #b9b6ae;
+			overflow: hidden;
+			touch-action: none;
+			font-family: ui-monospace, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+		}
+
+		#canvas {
+			display: block;
+			width: 100%;
+			height: 100%;
+			/* The whole point of the project: never smooth the upscale. */
+			image-rendering: pixelated;
+			image-rendering: crisp-edges;
+		}
+
+		#canvas:focus {
+			outline: none;
+		}
+
+		#gate {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 18px;
+			background: #0b0b10;
+			text-align: center;
+			padding: 24px;
+			box-sizing: border-box;
+		}
+
+		#gate.hidden { display: none; }
+
+		#title {
+			font-size: 15px;
+			letter-spacing: 0.32em;
+			text-transform: uppercase;
+			color: #d6d2c8;
+		}
+
+		#bar {
+			width: min(320px, 70vw);
+			height: 8px;
+			border: 1px solid #34313c;
+			background: #16151c;
+		}
+
+		#bar > div {
+			height: 100%;
+			width: 0%;
+			background: #b9b6ae;
+			transition: width 0.1s linear;
+		}
+
+		#message {
+			font-size: 11px;
+			letter-spacing: 0.14em;
+			color: #78746c;
+			min-height: 1.2em;
+		}
+
+		#start {
+			display: none;
+			font: inherit;
+			font-size: 12px;
+			letter-spacing: 0.24em;
+			text-transform: uppercase;
+			color: #0b0b10;
+			background: #b9b6ae;
+			border: 0;
+			padding: 10px 26px;
+			cursor: pointer;
+		}
+
+		#start:hover { background: #d6d2c8; }
+		#start:focus-visible { outline: 2px solid #d6d2c8; outline-offset: 3px; }
+
+		#warning {
+			display: none;
+			max-width: 42ch;
+			font-size: 11px;
+			line-height: 1.6;
+			color: #c9a86a;
+		}
+
+		#fullscreen {
+			position: absolute;
+			right: 8px;
+			bottom: 8px;
+			font: inherit;
+			font-size: 10px;
+			letter-spacing: 0.16em;
+			color: #78746c;
+			background: transparent;
+			border: 1px solid #34313c;
+			padding: 4px 10px;
+			cursor: pointer;
+			opacity: 0.35;
+		}
+
+		#fullscreen:hover { opacity: 1; color: #d6d2c8; }
+	</style>
+</head>
+<body>
+	<canvas id="canvas">Your browser does not support the canvas element.</canvas>
+
+	<noscript>This game requires JavaScript.</noscript>
+
+	<div id="gate">
+		<div id="title">$GODOT_PROJECT_NAME</div>
+		<div id="bar"><div id="bar-fill"></div></div>
+		<div id="message">loading</div>
+		<div id="warning"></div>
+		<button id="start" type="button">Click to start</button>
+	</div>
+
+	<button id="fullscreen" type="button" title="Toggle fullscreen">fullscreen</button>
+
+	<script src="$GODOT_URL"></script>
+	<script>
+		const GODOT_CONFIG = $GODOT_CONFIG;
+		const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
+
+		const gate = document.getElementById('gate');
+		const barFill = document.getElementById('bar-fill');
+		const message = document.getElementById('message');
+		const warning = document.getElementById('warning');
+		const startButton = document.getElementById('start');
+		const canvas = document.getElementById('canvas');
+		const fullscreenButton = document.getElementById('fullscreen');
+
+		// Safari reports itself in a way nothing else does: has "Safari" and
+		// "AppleWebKit" but neither "Chrome" nor "Chromium".
+		const ua = navigator.userAgent;
+		const isSafari = /Safari/.test(ua) && /AppleWebKit/.test(ua) && !/Chrom(e|ium)/.test(ua);
+		if (isSafari) {
+			warning.style.display = 'block';
+			warning.textContent = 'Safari has known WebGL 2.0 issues that affect this renderer. '
+				+ 'Chrome, Edge or Firefox are recommended. Continuing anyway may render incorrectly.';
+		}
+
+		function fail(err) {
+			console.error(err);
+			barFill.style.width = '0%';
+			message.style.color = '#c76a5a';
+			message.textContent = (err && err.message) ? err.message : String(err);
+		}
+
+		const missing = Engine.getMissingFeatures({ threads: GODOT_THREADS_ENABLED });
+		if (missing.length !== 0) {
+			// The usual cause is a threaded build served without the
+			// Cross-Origin-Opener-Policy / Cross-Origin-Embedder-Policy
+			// headers. See docs/development.md.
+			fail(new Error('This browser is missing features required to run:\n' + missing.join('\n')));
+		} else {
+			const engine = new Engine(GODOT_CONFIG);
+			engine.startGame({
+				onProgress: function (current, total) {
+					if (total > 0) {
+						const pct = Math.round((current / total) * 100);
+						barFill.style.width = pct + '%';
+						message.textContent = 'loading  ' + pct + '%';
+					} else {
+						// Total is unknown when the host does not send
+						// Content-Length -- common behind gzip/Brotli.
+						message.textContent = 'loading';
+					}
+				},
+			}).then(function () {
+				// Loaded, but NOT yet interacted with. Hold here: the click on
+				// the button below is the user gesture that lets audio start
+				// and pointer lock be granted.
+				barFill.style.width = '100%';
+				message.textContent = 'ready';
+				startButton.style.display = 'inline-block';
+				startButton.focus();
+			}, fail);
+		}
+
+		startButton.addEventListener('click', function () {
+			gate.classList.add('hidden');
+			// Hand focus to the canvas so keyboard input and pointer lock
+			// requests originate from it.
+			canvas.focus();
+		});
+
+		fullscreenButton.addEventListener('click', function () {
+			if (document.fullscreenElement) {
+				document.exitFullscreen();
+			} else {
+				// Fullscreen the canvas, not the document: the project uses
+				// integer scaling, and fullscreening a wrapper would letterbox
+				// it twice.
+				canvas.requestFullscreen().catch(function (err) {
+					console.warn('Fullscreen refused:', err);
+				});
+			}
+			canvas.focus();
+		});
+	</script>
+</body>
+</html>

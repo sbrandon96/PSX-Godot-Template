@@ -12,11 +12,14 @@
 /builds/
 /export/
 
-# export_presets.cfg is IGNORED for now.
-# It can contain signing keys/passwords for some platforms.
-# We deliberately un-ignore it in the Export phase, once the
-# web preset exists and has been confirmed credential-free.
-export_presets.cfg
+# export_presets.cfg IS COMMITTED. A template whose export settings do not
+# travel with it is not a template -- every derived project would have to
+# rediscover the Compatibility/WebGL constraints by hand.
+#
+# It is committed because the Web preset carries no credentials. Android and
+# iOS presets DO store keystore paths and passwords. If you add one, either
+# keep the secrets in a Godot editor setting rather than the preset, or
+# re-ignore this file.
 
 # ---- OS / editor noise ------------------------------------------------------
 .DS_Store
